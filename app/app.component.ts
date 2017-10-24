@@ -3,22 +3,57 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'my-app',
   template: `
-  <h1>Recipes!</h1>
-  <ul>
-    <li *ngFor="let theRecipe of recipes">
-      {{theRecipe.name}}
-      <ol>
-        <li *ngFor="let theStep of theRecipe.steps">
-          {{theStep}}
+  <div class="container">
+    <div class="row">
+      <h1>Recipes!</h1>
+    </div>
+    <div class="row">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let theRecipe of recipes"
+        [class.selected]="theRecipe === selectedRecipe"
+        (click)="onSelect(theRecipe)">
+          {{theRecipe.name}}
         </li>
-      </ol>
-    </li>
-  </ul>
+      </ul>
+    </div>
+    <div *ngIf="selectedRecipe">
+      <div class="row">
+        <div class="col-3">
+          <h4>Ingredients:</h4>
+        </div>
+        <div class="col-9">
+          <h4>Steps:</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let theIngredient of selectedRecipe.ingredients">
+              {{theIngredient}}
+            </li>
+          </ul>
+        </div>
+        <div class="col-9">
+          <ol class="list-group">
+            <li class="list-group-item" *ngFor="let theStep of selectedRecipe.steps">
+              {{theStep}}
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
   `
 })
 
 export class AppComponent {
   recipes = RECIPES;
+
+  selectedRecipe: Recipe;
+
+  onSelect(theRecipe: Recipe): void {
+   this.selectedRecipe = theRecipe;
+  }
 }
 
 export class Recipe {
